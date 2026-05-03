@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Globe, Users, Shield, Zap, ExternalLink, TrendingUp, ChevronRight } from "lucide-react";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
@@ -16,11 +17,11 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
 };
 
 const CORRIDORS = [
-  { from: "AED", to: "INR", flag: "🇮🇳", name: "India" },
-  { from: "AED", to: "PKR", flag: "🇵🇰", name: "Pakistan" },
-  { from: "AED", to: "PHP", flag: "🇵🇭", name: "Philippines" },
-  { from: "AED", to: "GBP", flag: "🇬🇧", name: "UK" },
-  { from: "AED", to: "EUR", flag: "🇪🇺", name: "Europe" },
+  { from: "AED", to: "INR", flag: "🇮🇳", name: "India", code: "IN" },
+  { from: "AED", to: "PKR", flag: "🇵🇰", name: "Pakistan", code: "PK" },
+  { from: "AED", to: "PHP", flag: "🇵🇭", name: "Philippines", code: "PH" },
+  { from: "AED", to: "GBP", flag: "🇬🇧", name: "UK", code: "GB" },
+  { from: "AED", to: "EUR", flag: "🇪🇺", name: "Europe", code: "EU" },
 ];
 
 export default function Home() {
@@ -48,10 +49,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* Background Effects */}
-      <div className="fixed inset-0 grid-bg opacity-50 pointer-events-none" />
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-accent/5 blur-[120px] pointer-events-none" />
+      {/* Background Image */}
+      <div className="fixed inset-0 pointer-events-none">
+        <Image 
+          src="/images/hero-bg.jpg" 
+          alt="" 
+          fill 
+          className="object-cover opacity-40"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
+      </div>
 
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
@@ -104,80 +112,62 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-36 pb-24 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Hackathon Badge */}
-          <div className="inline-flex items-center gap-2 text-xs border border-border px-4 py-2 rounded-full mb-8 animate-slide-up">
-            <span className="text-foreground-muted">Circle Arc Hackathon 2025</span>
-            <span className="w-1 h-1 bg-foreground-muted rounded-full" />
-            <span className="text-foreground font-medium">$25,000</span>
-          </div>
-
+      <section className="relative pt-32 pb-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[1.1] mb-8 animate-slide-up stagger-1">
-            Move money{" "}
-            <span className="font-serif italic">anywhere</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-tight leading-[1.15] mb-6 animate-slide-up">
+            <span className="font-light">Send money</span>{" "}
+            <span className="font-serif italic font-normal">anywhere</span>
             <br />
-            settle <span className="font-serif italic">instantly</span>
+            <span className="font-light">settle</span>{" "}
+            <span className="font-serif italic font-normal">instantly</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-foreground-muted max-w-2xl mx-auto leading-relaxed mb-10 animate-slide-up stagger-2">
-            Cross-border payments from UAE to the world. Pay in{" "}
-            <span className="text-foreground font-medium">{CURRENCY_SYMBOLS.AED} AED</span>, settle in{" "}
-            <span className="text-primary font-medium">{CURRENCY_SYMBOLS.USD} USDC</span>. Real-time rates, 0.1% fees.
+          <p className="text-base sm:text-lg text-foreground-muted max-w-xl mx-auto leading-relaxed mb-8 animate-slide-up stagger-1">
+            Cross-border payments from UAE to the world. Pay in {CURRENCY_SYMBOLS.AED} AED, settle in {CURRENCY_SYMBOLS.USD} USDC. Real-time rates, 0.1% fees.
           </p>
 
           {/* Live FX Ticker */}
-          <div className="flex items-center justify-center gap-4 mb-10 animate-slide-up stagger-3">
-            <div className="flex items-center gap-3 border border-border rounded-xl px-4 py-2.5">
-              <TrendingUp className="w-4 h-4 text-foreground-muted" />
-              <div className="flex items-center gap-2">
-                <span className="text-xl">{currentCorridor.flag}</span>
-                <div className="text-left">
-                  <p className="text-xs text-foreground-muted">
-                    1 {CURRENCY_SYMBOLS.USD} USD
-                  </p>
-                  <p className="text-foreground text-sm font-medium">
-                    {CURRENCY_SYMBOLS[currentCorridor.to]} {rate.toFixed(2)} {currentCorridor.to}
-                  </p>
-                </div>
-              </div>
-              <span className="text-xs text-foreground-muted border border-border px-2 py-0.5 rounded">LIVE</span>
+          <div className="flex items-center justify-center mb-8 animate-slide-up stagger-2">
+            <div className="flex items-center gap-2.5 border border-border rounded-lg px-3 py-2 bg-card/50">
+              <TrendingUp className="w-3.5 h-3.5 text-foreground-muted" />
+              <span className="text-lg">{currentCorridor.flag}</span>
+              <span className="text-sm text-foreground-muted">1 USD =</span>
+              <span className="text-sm font-medium">{CURRENCY_SYMBOLS[currentCorridor.to]} {rate.toFixed(2)}</span>
+              <span className="text-[10px] text-foreground-subtle border border-border px-1.5 py-0.5 rounded">LIVE</span>
             </div>
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up stagger-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-slide-up stagger-3">
             <Link
               href="/send"
-              className="w-full sm:w-auto bg-foreground text-background px-8 py-3.5 rounded-full text-sm font-medium hover:bg-foreground/90 transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto bg-foreground text-background px-6 py-2.5 rounded-full text-sm font-medium hover:bg-foreground/90 transition-all flex items-center justify-center gap-2"
             >
               Start Sending
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
             <Link
               href="/signup"
-              className="w-full sm:w-auto border border-border hover:border-foreground-muted text-foreground px-8 py-3.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto border border-border hover:border-foreground-muted text-foreground px-6 py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2"
             >
               Create Account
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
           {/* Currency Symbols Row */}
-          <div className="flex items-center justify-center gap-6 mt-16 animate-slide-up stagger-5">
+          <div className="flex items-center justify-center gap-4 mt-12 animate-slide-up stagger-4">
             {CORRIDORS.map((c, i) => (
               <div
                 key={c.to}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-500 ${
-                  i === activeRate ? "bg-card border border-primary/30 scale-110" : "opacity-50"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all duration-300 ${
+                  i === activeRate ? "bg-card border border-border" : "opacity-40"
                 }`}
               >
-                <span className="text-2xl">{c.flag}</span>
-                <span className="text-sm font-medium text-foreground-muted">
-                  {CURRENCY_SYMBOLS[c.to]} {c.to}
-                </span>
+                <span className="text-base">{c.flag}</span>
+                <span className="text-xs text-foreground-muted">{c.to}</span>
               </div>
             ))}
           </div>
@@ -185,22 +175,20 @@ export default function Home() {
       </section>
 
       {/* Stats Row */}
-      <section className="px-6 pb-24">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <section className="px-6 pb-16">
+        <div className="max-w-3xl mx-auto">
+          <div className="grid grid-cols-3 gap-3">
             {[
-              { value: "~3s", label: "Settlement", icon: "⚡" },
-              { value: "0.1%", label: "Platform Fee", icon: "💎" },
-              { value: "7+", label: "Corridors", icon: "🌍" },
-              { value: "$25K", label: "Prize Pool", icon: "🏆" },
-            ].map((stat, i) => (
+              { value: "~3s", label: "Settlement" },
+              { value: "0.1%", label: "Fee" },
+              { value: "7+", label: "Corridors" },
+            ].map((stat) => (
               <div
                 key={stat.label}
-                className="group relative text-center bg-card border border-border rounded-2xl py-6 px-4 hover:border-primary/50 transition-all duration-300"
+                className="text-center bg-card/50 border border-border rounded-xl py-4 px-3"
               >
-                <span className="text-2xl mb-2 block">{stat.icon}</span>
-                <p className="text-3xl md:text-4xl font-semibold tracking-tight">{stat.value}</p>
-                <p className="text-sm text-foreground-muted mt-1">{stat.label}</p>
+                <p className="text-2xl font-medium tracking-tight">{stat.value}</p>
+                <p className="text-xs text-foreground-muted mt-0.5">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -208,14 +196,13 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="px-6 pb-24">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-xs text-foreground-muted uppercase tracking-[0.2em] mb-4">Products</p>
-            <h2 className="text-3xl md:text-4xl font-light tracking-tight mb-4">
-              <span className="font-serif italic">Everything</span> you need
+      <section id="features" className="px-6 pb-16">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-[10px] text-foreground-muted uppercase tracking-[0.25em] mb-3">Products</p>
+            <h2 className="text-2xl md:text-3xl tracking-tight mb-2">
+              <span className="font-light">Built for</span> <span className="font-serif italic">modern</span> <span className="font-light">payments</span>
             </h2>
-            <p className="text-foreground-muted">Purpose-built rails for modern payments</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
