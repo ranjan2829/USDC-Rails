@@ -87,7 +87,7 @@ export default function PayrollPage() {
       <header className="border-b border-border glass sticky top-0 z-50">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center gap-4">
           <Link
-            href="/"
+            href="/dashboard"
             className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-card hover:border-accent/30 transition-all"
           >
             <ArrowLeft className="w-5 h-5 text-foreground-muted" />

@@ -44,8 +44,8 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center">
-              <span className="text-background font-bold text-sm font-serif">U</span>
+            <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center">
+              <Globe className="w-4 h-4 text-white" />
             </div>
             <span className="font-semibold tracking-tight">USDC Rails</span>
           </div>
@@ -63,16 +63,22 @@ export default function Home() {
             </a>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-1.5 text-xs text-foreground-muted border border-border px-3 py-1.5 rounded-full">
               <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
               Arc Testnet
             </div>
             <Link
-              href="/send"
+              href="/login"
+              className="text-sm text-foreground-muted hover:text-foreground px-4 py-2 transition-colors"
+            >
+              Sign in
+            </Link>
+            <Link
+              href="/signup"
               className="bg-foreground text-background px-4 py-2 rounded-full text-sm font-medium hover:opacity-85 transition-opacity flex items-center gap-1.5"
             >
-              Launch App <ArrowRight className="w-3.5 h-3.5" />
+              Get started <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
@@ -122,16 +128,16 @@ export default function Home() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-slide-up stagger-4">
             <Link
-              href="/send"
-              className="w-full sm:w-auto bg-foreground text-background px-7 py-3 rounded-full font-semibold hover:opacity-85 transition-opacity flex items-center justify-center gap-2"
+              href="/signup"
+              className="w-full sm:w-auto bg-foreground text-background px-8 py-3.5 rounded-full font-semibold hover:opacity-85 transition-opacity flex items-center justify-center gap-2 shadow-lg"
             >
-              Start Sending <ArrowRight className="w-4 h-4" />
+              Create free account <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/payroll"
-              className="w-full sm:w-auto border border-border hover:border-foreground-muted text-foreground px-7 py-3 rounded-full font-medium transition-colors flex items-center justify-center gap-2"
+              href="/login"
+              className="w-full sm:w-auto border border-border hover:border-foreground-muted text-foreground px-8 py-3.5 rounded-full font-medium transition-colors flex items-center justify-center gap-2"
             >
-              Global Payroll <ArrowRight className="w-4 h-4" />
+              Sign in
             </Link>
           </div>
 
@@ -182,7 +188,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <Link href="/send" className="group">
+            <Link href="/dashboard" className="group">
               <div className="h-full bg-card border border-border rounded-2xl p-7 hover:border-foreground/20 transition-all duration-200">
                 <div className="flex items-start justify-between mb-6">
                   <div className="w-12 h-12 rounded-xl bg-foreground/8 flex items-center justify-center group-hover:bg-foreground/12 transition-colors">
@@ -202,7 +208,7 @@ export default function Home() {
               </div>
             </Link>
 
-            <Link href="/payroll" className="group">
+            <Link href="/dashboard" className="group">
               <div className="h-full bg-card border border-border rounded-2xl p-7 hover:border-foreground/20 transition-all duration-200">
                 <div className="flex items-start justify-between mb-6">
                   <div className="w-12 h-12 rounded-xl bg-foreground/8 flex items-center justify-center group-hover:bg-foreground/12 transition-colors">

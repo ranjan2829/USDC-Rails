@@ -1,19 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
+import { v4 as uuidv4 } from "uuid";
 import { circleClient } from "@/lib/circle.server";
 import { generateCiphertext } from "@/lib/cipher";
-import { v4 as uuidv4 } from "uuid";
+import { createClient } from "@/lib/supabase/server";
 
 const ARC_USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 
 export async function POST(req: NextRequest) {
   try {
-    const { walletId, recipientAddress, amount, destinationCountry } = await req.json();
+    const { recipientAddress, amount, destinationCountry, inputCurrency, inputAmount } =
+      await req.json();
 
-    if (!walletId || !recipientAddress || !amount) {
+    if (!recipientAddress || !amount) {
       return NextResponse.json(
-        { error: "walletId, recipientAddress, amount are required" },
+        { error: "recipientAddress and amount are required" },
         { status: 400 }
       );
+    }
+
+    // Get logged-in user's wallet (fall back to demo wallet)
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    let walletId = process.env.NEXT_PUBLIC_DEMO_WALLET_ID ?? "b5d911fd-8d0b-5ed1-88b1-2d244bff80fe";
+
+    if (user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("wallet_id")
+        .eq("id", user.id)
+        .single();
+      if (profile?.wallet_id) walletId = profile.wallet_id;
     }
 
     const ciphertext = await generateCiphertext();
@@ -30,9 +47,26 @@ export async function POST(req: NextRequest) {
       entitySecretCiphertext: ciphertext,
     } as any);
 
+    const circleId = transfer.data?.id;
+    const status = transfer.data?.state ?? "INITIATED";
+
+    // Persist to Supabase if user is logged in
+    if (user) {
+      await supabase.from("transactions").insert({
+        user_id: user.id,
+        circle_id: circleId,
+        amount: parseFloat(amount),
+        recipient_address: recipientAddress,
+        destination_country: destinationCountry ?? null,
+        input_currency: inputCurrency ?? "USD",
+        input_amount: inputAmount ? parseFloat(inputAmount) : null,
+        status,
+      });
+    }
+
     return NextResponse.json({
-      transactionId: transfer.data?.id,
-      status: transfer.data?.state,
+      transactionId: circleId,
+      status,
       amount,
       destinationCountry,
       timestamp: new Date().toISOString(),

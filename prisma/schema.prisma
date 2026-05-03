@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String
+  passwordHash  String
+  walletId      String   @unique
+  walletAddress String
+  createdAt     DateTime @default(now())
+
+  transactions Transaction[]
+  payrollJobs  PayrollJob[]
+}
+
+model Transaction {
+  id                 String   @id @default(uuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id])
+  circleId           String?  @unique
+  amount             Float
+  recipientAddress   String
+  destinationCountry String?
+  inputCurrency      String   @default("USD")
+  inputAmount        Float?
+  status             String   @default("INITIATED")
+  txHash             String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model PayrollJob {
+  id        String       @id @default(uuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  name      String
+  status    String       @default("pending")
+  rows      PayrollRow[]
+  createdAt DateTime     @default(now())
+}
+
+model PayrollRow {
+  id      String     @id @default(uuid())
+  jobId   String
+  job     PayrollJob @relation(fields: [jobId], references: [id])
+  name    String
+  address String
+  amount  Float
+  status  String  @default("pending")
+  txId    String?
+  error   String?
+}
