@@ -1,8 +1,9 @@
 "use client";
 
+import React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Globe, Users, Shield, Zap, ExternalLink, TrendingUp } from "lucide-react";
+import { ArrowRight, Globe, Users, Zap, ExternalLink, TrendingUp, Lock, FileText, Bot } from "lucide-react";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   USD: "$", AED: "د.إ", INR: "₹", PKR: "Rs", PHP: "₱", BDT: "৳", GBP: "£", EUR: "€",
@@ -188,79 +189,31 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <Link href="/dashboard" className="group">
-              <div className="h-full bg-card border border-border rounded-2xl p-7 hover:border-foreground/20 transition-all duration-200">
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-foreground/8 flex items-center justify-center group-hover:bg-foreground/12 transition-colors">
-                    <Globe className="w-6 h-6 text-foreground" />
+            {([
+              { href: "/send",    icon: <Globe className="w-6 h-6 text-foreground" />,    track: "Track 1", title: ["Cross-Border", "Payments"],  desc: "UAE to India, Pakistan, Philippines. Live FX rates, 0.1% fees, instant settlement." },
+              { href: "/payroll", icon: <Users className="w-6 h-6 text-foreground" />,    track: "Track 1", title: ["Global", "Payroll"],          desc: "Upload CSV, pay your team worldwide in one click. On-chain receipts, zero bank delays." },
+              { href: "/escrow",  icon: <Lock className="w-6 h-6 text-foreground" />,     track: "Track 2", title: ["Trade Finance", "Escrow"],    desc: "Lock USDC in escrow. Release automatically on milestone completion." },
+              { href: "/invoice", icon: <FileText className="w-6 h-6 text-foreground" />, track: "Track 3", title: ["USDC", "Invoices"],           desc: "Create on-chain invoices and get paid in USDC. Instant settlement, no chargebacks." },
+              { href: "/agent",   icon: <Bot className="w-6 h-6 text-foreground" />,      track: "Track 4", title: ["AI Payment", "Agent"],        desc: "Natural language payments via Claude. Describe a payment, AI executes it." },
+            ] as { href: string; icon: React.ReactNode; track: string; title: [string, string]; desc: string }[]).map(({ href, icon, track, title, desc }) => (
+              <Link key={href} href={href} className="group">
+                <div className="h-full bg-card border border-border rounded-2xl p-7 hover:border-foreground/20 transition-all duration-200">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-foreground/8 flex items-center justify-center group-hover:bg-foreground/12 transition-colors">
+                      {icon}
+                    </div>
+                    <span className="text-xs text-foreground-subtle">{track}</span>
                   </div>
-                  <span className="text-xs text-foreground-subtle">Track 1</span>
-                </div>
-                <h3 className="text-xl font-medium mb-2">
-                  Cross-Border <span className="font-serif italic text-foreground-muted">Payments</span>
-                </h3>
-                <p className="text-foreground-muted text-sm leading-relaxed mb-5">
-                  UAE to India, Pakistan, Philippines and more. Live FX rates, 0.1% fees, instant settlement.
-                </p>
-                <div className="flex items-center gap-2 text-sm text-foreground-muted group-hover:text-foreground group-hover:gap-3 transition-all">
-                  Open app <ArrowRight className="w-4 h-4" />
-                </div>
-              </div>
-            </Link>
-
-            <Link href="/dashboard" className="group">
-              <div className="h-full bg-card border border-border rounded-2xl p-7 hover:border-foreground/20 transition-all duration-200">
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-foreground/8 flex items-center justify-center group-hover:bg-foreground/12 transition-colors">
-                    <Users className="w-6 h-6 text-foreground" />
+                  <h3 className="text-xl font-medium mb-2">
+                    {title[0]} <span className="font-serif italic text-foreground-muted">{title[1]}</span>
+                  </h3>
+                  <p className="text-foreground-muted text-sm leading-relaxed mb-5">{desc}</p>
+                  <div className="flex items-center gap-2 text-sm text-foreground-muted group-hover:text-foreground group-hover:gap-3 transition-all">
+                    Open app <ArrowRight className="w-4 h-4" />
                   </div>
-                  <span className="text-xs text-foreground-subtle">Track 1</span>
                 </div>
-                <h3 className="text-xl font-medium mb-2">
-                  Global <span className="font-serif italic text-foreground-muted">Payroll</span>
-                </h3>
-                <p className="text-foreground-muted text-sm leading-relaxed mb-5">
-                  Upload CSV, pay your team worldwide in one click. On-chain receipts, zero bank delays.
-                </p>
-                <div className="flex items-center gap-2 text-sm text-foreground-muted group-hover:text-foreground group-hover:gap-3 transition-all">
-                  Open app <ArrowRight className="w-4 h-4" />
-                </div>
-              </div>
-            </Link>
-
-            <div className="opacity-40 cursor-not-allowed">
-              <div className="h-full bg-card border border-border rounded-2xl p-7">
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-foreground/5 flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-foreground-subtle" />
-                  </div>
-                  <span className="text-xs text-foreground-subtle">Track 2 · Soon</span>
-                </div>
-                <h3 className="text-xl font-medium mb-2">
-                  Trade Finance <span className="font-serif italic text-foreground-muted">Escrow</span>
-                </h3>
-                <p className="text-foreground-muted text-sm leading-relaxed">
-                  Lock USDC in smart escrow. Release on milestone completion.
-                </p>
-              </div>
-            </div>
-
-            <div className="opacity-40 cursor-not-allowed">
-              <div className="h-full bg-card border border-border rounded-2xl p-7">
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-foreground/5 flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-foreground-subtle" />
-                  </div>
-                  <span className="text-xs text-foreground-subtle">Track 4 · Soon</span>
-                </div>
-                <h3 className="text-xl font-medium mb-2">
-                  AI Payment <span className="font-serif italic text-foreground-muted">Agent</span>
-                </h3>
-                <p className="text-foreground-muted text-sm leading-relaxed">
-                  Autonomous agent that orchestrates cross-border payments via Claude + USDC.
-                </p>
-              </div>
-            </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

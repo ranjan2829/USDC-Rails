@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import React from "react";
 import {
   Globe, LogOut, Send, Users, Copy, CheckCheck,
-  ExternalLink, ArrowUpRight, Wallet, Clock,
+  ExternalLink, ArrowUpRight, Wallet, Clock, Lock, FileText, Bot, Home,
 } from "lucide-react";
 
 interface UserProfile {
@@ -111,11 +112,19 @@ export default function DashboardPage() {
               Arc Testnet
             </div>
             {user && <Initials name={user.name} />}
+            <Link
+              href="/"
+              className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground-subtle hover:text-foreground hover:border-foreground/30 transition-all"
+              title="Home"
+            >
+              <Home className="w-3.5 h-3.5" />
+            </Link>
             <button
               onClick={handleLogout}
-              className="text-foreground-subtle hover:text-foreground transition-colors"
+              className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-foreground-subtle hover:text-foreground hover:border-foreground/30 transition-all"
+              title="Sign out"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
@@ -166,32 +175,30 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick actions */}
-        <div className="grid grid-cols-2 gap-4">
-          <Link href="/send">
-            <div className="group bg-card border border-border hover:border-foreground/20 rounded-2xl p-6 cursor-pointer transition-all">
-              <div className="flex items-start justify-between mb-6">
-                <div className="w-10 h-10 rounded-xl bg-foreground/8 flex items-center justify-center group-hover:bg-foreground/12 transition-colors">
-                  <Send className="w-5 h-5" />
+        <div>
+          <p className="text-xs text-foreground-muted uppercase tracking-wider mb-3">Products</p>
+          <div className="grid grid-cols-2 gap-4">
+            {([
+              { href: "/send",    icon: <Send className="w-5 h-5" />,     label: "Send USDC",  sub: "Cross-border payments", track: "Track 1" },
+              { href: "/payroll", icon: <Users className="w-5 h-5" />,    label: "Payroll",    sub: "Batch CSV payments",    track: "Track 1" },
+              { href: "/escrow",  icon: <Lock className="w-5 h-5" />,     label: "Escrow",     sub: "Trade finance lock",    track: "Track 2" },
+              { href: "/invoice", icon: <FileText className="w-5 h-5" />, label: "Invoices",   sub: "Get paid in USDC",      track: "Track 3" },
+              { href: "/agent",   icon: <Bot className="w-5 h-5" />,      label: "AI Agent",   sub: "Natural language pay",  track: "Track 4" },
+            ] as { href: string; icon: React.ReactNode; label: string; sub: string; track: string }[]).map(({ href, icon, label, sub, track }) => (
+              <Link key={href} href={href}>
+                <div className="group bg-card border border-border hover:border-foreground/20 rounded-2xl p-6 cursor-pointer transition-all">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-foreground/8 flex items-center justify-center group-hover:bg-foreground/12 transition-colors">
+                      {icon}
+                    </div>
+                    <span className="text-xs text-foreground-subtle">{track}</span>
+                  </div>
+                  <p className="font-medium mb-1">{label}</p>
+                  <p className="text-sm text-foreground-muted">{sub}</p>
                 </div>
-                <span className="text-xs text-foreground-subtle">Track 1</span>
-              </div>
-              <p className="font-medium mb-1">Send USDC</p>
-              <p className="text-sm text-foreground-muted">Cross-border payments</p>
-            </div>
-          </Link>
-
-          <Link href="/payroll">
-            <div className="group bg-card border border-border hover:border-foreground/20 rounded-2xl p-6 cursor-pointer transition-all">
-              <div className="flex items-start justify-between mb-6">
-                <div className="w-10 h-10 rounded-xl bg-foreground/8 flex items-center justify-center group-hover:bg-foreground/12 transition-colors">
-                  <Users className="w-5 h-5" />
-                </div>
-                <span className="text-xs text-foreground-subtle">Track 1</span>
-              </div>
-              <p className="font-medium mb-1">Payroll</p>
-              <p className="text-sm text-foreground-muted">Batch CSV payments</p>
-            </div>
-          </Link>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Transaction history */}

@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { circleClient } from "@/lib/circle.server";
 import { generateCiphertext } from "@/lib/cipher";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
+import { getSession } from "@/lib/auth";
 
 const ARC_USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 
@@ -18,17 +19,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Get logged-in user's wallet (fall back to demo wallet)
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
+    const session = await getSession();
     let walletId = process.env.NEXT_PUBLIC_DEMO_WALLET_ID ?? "b5d911fd-8d0b-5ed1-88b1-2d244bff80fe";
 
-    if (user) {
-      const { data: profile } = await supabase
+    if (session) {
+      const admin = createAdminClient();
+      const { data: profile } = await admin
         .from("profiles")
         .select("wallet_id")
-        .eq("id", user.id)
+        .eq("id", session.userId)
         .single();
       if (profile?.wallet_id) walletId = profile.wallet_id;
     }
@@ -50,10 +49,10 @@ export async function POST(req: NextRequest) {
     const circleId = transfer.data?.id;
     const status = transfer.data?.state ?? "INITIATED";
 
-    // Persist to Supabase if user is logged in
-    if (user) {
-      await supabase.from("transactions").insert({
-        user_id: user.id,
+    if (session) {
+      const admin = createAdminClient();
+      await admin.from("transactions").insert({
+        user_id: session.userId,
         circle_id: circleId,
         amount: parseFloat(amount),
         recipient_address: recipientAddress,
