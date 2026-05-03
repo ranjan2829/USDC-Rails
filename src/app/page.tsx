@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Globe, Users, Shield, Zap, ExternalLink, Sparkles, TrendingUp, ChevronRight } from "lucide-react";
+import { ArrowRight, Globe, Users, Shield, Zap, ExternalLink, TrendingUp, ChevronRight } from "lucide-react";
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   USD: "$",
@@ -57,10 +57,10 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg glow-primary">
-              <span className="text-primary-foreground font-serif font-bold text-xl">R</span>
+            <div className="w-9 h-9 rounded-lg bg-foreground flex items-center justify-center">
+              <span className="text-background font-serif font-bold text-lg">R</span>
             </div>
-            <span className="font-semibold tracking-tight text-lg">USDC Rails</span>
+            <span className="font-medium tracking-tight">USDC Rails</span>
           </div>
 
           <div className="hidden md:flex items-center gap-8">
@@ -82,9 +82,9 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 text-xs bg-primary/10 text-primary px-3 py-1.5 rounded-full border border-primary/20">
-              <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-              <span className="font-medium">Arc Testnet</span>
+            <div className="hidden sm:flex items-center gap-2 text-xs text-foreground-muted border border-border px-3 py-1.5 rounded-full">
+              <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+              <span>Arc Testnet</span>
             </div>
             <Link
               href="/login"
@@ -94,7 +94,7 @@ export default function Home() {
             </Link>
             <Link
               href="/send"
-              className="bg-gradient-to-r from-primary to-accent text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold hover:opacity-90 transition-all flex items-center gap-2 shadow-lg glow-primary"
+              className="bg-foreground text-background px-5 py-2 rounded-full text-sm font-medium hover:bg-foreground/90 transition-all flex items-center gap-2"
             >
               Launch App
               <ArrowRight className="w-4 h-4" />
@@ -107,18 +107,18 @@ export default function Home() {
       <section className="relative pt-36 pb-24 px-6">
         <div className="max-w-5xl mx-auto text-center">
           {/* Hackathon Badge */}
-          <div className="inline-flex items-center gap-2 text-sm border border-primary/30 bg-primary/5 px-4 py-2 rounded-full mb-8 animate-slide-up">
-            <Sparkles className="w-4 h-4 text-primary" />
+          <div className="inline-flex items-center gap-2 text-xs border border-border px-4 py-2 rounded-full mb-8 animate-slide-up">
             <span className="text-foreground-muted">Circle Arc Hackathon 2025</span>
-            <span className="text-primary font-semibold">$25,000</span>
+            <span className="w-1 h-1 bg-foreground-muted rounded-full" />
+            <span className="text-foreground font-medium">$25,000</span>
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight leading-[1.05] mb-8 animate-slide-up stagger-1">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[1.1] mb-8 animate-slide-up stagger-1">
             Move money{" "}
-            <span className="font-serif italic text-foreground-muted">anywhere,</span>
+            <span className="font-serif italic">anywhere</span>
             <br />
-            <span className="text-gradient">settle instantly.</span>
+            settle <span className="font-serif italic">instantly</span>
           </h1>
 
           {/* Subheadline */}
@@ -129,21 +129,21 @@ export default function Home() {
           </p>
 
           {/* Live FX Ticker */}
-          <div className="flex items-center justify-center gap-4 mb-12 animate-slide-up stagger-3">
-            <div className="flex items-center gap-3 bg-card border border-border rounded-2xl px-5 py-3">
-              <TrendingUp className="w-5 h-5 text-primary" />
+          <div className="flex items-center justify-center gap-4 mb-10 animate-slide-up stagger-3">
+            <div className="flex items-center gap-3 border border-border rounded-xl px-4 py-2.5">
+              <TrendingUp className="w-4 h-4 text-foreground-muted" />
               <div className="flex items-center gap-2">
-                <span className="text-2xl">{currentCorridor.flag}</span>
+                <span className="text-xl">{currentCorridor.flag}</span>
                 <div className="text-left">
                   <p className="text-xs text-foreground-muted">
                     1 {CURRENCY_SYMBOLS.USD} USD
                   </p>
-                  <p className="text-foreground font-semibold">
+                  <p className="text-foreground text-sm font-medium">
                     {CURRENCY_SYMBOLS[currentCorridor.to]} {rate.toFixed(2)} {currentCorridor.to}
                   </p>
                 </div>
               </div>
-              <span className="text-xs text-success bg-success/10 px-2 py-1 rounded-full font-medium">LIVE</span>
+              <span className="text-xs text-foreground-muted border border-border px-2 py-0.5 rounded">LIVE</span>
             </div>
           </div>
 
@@ -151,14 +151,14 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up stagger-4">
             <Link
               href="/send"
-              className="w-full sm:w-auto bg-gradient-to-r from-primary to-primary-hover text-primary-foreground px-10 py-4 rounded-full text-base font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-2 shadow-xl glow-primary"
+              className="w-full sm:w-auto bg-foreground text-background px-8 py-3.5 rounded-full text-sm font-medium hover:bg-foreground/90 transition-all flex items-center justify-center gap-2"
             >
               Start Sending
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/signup"
-              className="w-full sm:w-auto border border-border bg-card/50 hover:bg-card text-foreground px-10 py-4 rounded-full text-base font-medium transition-all flex items-center justify-center gap-2"
+              className="w-full sm:w-auto border border-border hover:border-foreground-muted text-foreground px-8 py-3.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2"
             >
               Create Account
               <ChevronRight className="w-4 h-4" />
@@ -199,7 +199,7 @@ export default function Home() {
                 className="group relative text-center bg-card border border-border rounded-2xl py-6 px-4 hover:border-primary/50 transition-all duration-300"
               >
                 <span className="text-2xl mb-2 block">{stat.icon}</span>
-                <p className="text-3xl md:text-4xl font-bold tracking-tight text-gradient">{stat.value}</p>
+                <p className="text-3xl md:text-4xl font-semibold tracking-tight">{stat.value}</p>
                 <p className="text-sm text-foreground-muted mt-1">{stat.label}</p>
               </div>
             ))}
@@ -211,33 +211,33 @@ export default function Home() {
       <section id="features" className="px-6 pb-24">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-sm text-primary font-medium uppercase tracking-widest mb-3">Products</p>
-            <h2 className="text-4xl md:text-5xl font-medium tracking-tight mb-4">
-              <span className="font-serif italic text-foreground-muted">Everything</span> you need
+            <p className="text-xs text-foreground-muted uppercase tracking-[0.2em] mb-4">Products</p>
+            <h2 className="text-3xl md:text-4xl font-light tracking-tight mb-4">
+              <span className="font-serif italic">Everything</span> you need
             </h2>
-            <p className="text-foreground-muted text-lg">Purpose-built rails for modern payments</p>
+            <p className="text-foreground-muted">Purpose-built rails for modern payments</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Send USDC */}
             <Link href="/send" className="group">
-              <div className="h-full bg-card border border-border rounded-3xl p-8 hover:border-primary/50 hover:glow-primary transition-all duration-500">
+              <div className="h-full bg-card border border-border rounded-2xl p-8 hover:border-foreground/20 transition-all duration-300">
                 <div className="flex items-start justify-between mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Globe className="w-7 h-7 text-primary" />
+                  <div className="w-12 h-12 rounded-xl bg-foreground/10 flex items-center justify-center group-hover:bg-foreground/15 transition-colors">
+                    <Globe className="w-6 h-6 text-foreground" />
                   </div>
-                  <span className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20">
+                  <span className="text-xs font-medium text-foreground-muted">
                     Track 1
                   </span>
                 </div>
-                <h3 className="text-2xl font-semibold mb-3">
-                  Cross-Border <span className="font-serif italic text-foreground-muted">Payments</span>
+                <h3 className="text-xl font-medium mb-3">
+                  Cross-Border <span className="font-serif italic">Payments</span>
                 </h3>
                 <p className="text-foreground-muted leading-relaxed mb-6">
                   Send {CURRENCY_SYMBOLS.AED} AED to {CURRENCY_SYMBOLS.INR} INR, {CURRENCY_SYMBOLS.PKR} PKR,{" "}
                   {CURRENCY_SYMBOLS.PHP} PHP and more. Live FX, transparent fees.
                 </p>
-                <div className="flex items-center gap-2 text-primary font-medium group-hover:gap-4 transition-all">
+                <div className="flex items-center gap-2 text-foreground-muted font-medium group-hover:text-foreground group-hover:gap-3 transition-all">
                   Open app
                   <ArrowRight className="w-4 h-4" />
                 </div>
@@ -246,22 +246,22 @@ export default function Home() {
 
             {/* Global Payroll */}
             <Link href="/payroll" className="group">
-              <div className="h-full bg-card border border-border rounded-3xl p-8 hover:border-accent/50 hover:glow-accent transition-all duration-500">
+              <div className="h-full bg-card border border-border rounded-2xl p-8 hover:border-foreground/20 transition-all duration-300">
                 <div className="flex items-start justify-between mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Users className="w-7 h-7 text-accent" />
+                  <div className="w-12 h-12 rounded-xl bg-foreground/10 flex items-center justify-center group-hover:bg-foreground/15 transition-colors">
+                    <Users className="w-6 h-6 text-foreground" />
                   </div>
-                  <span className="text-xs font-semibold text-accent bg-accent/10 px-3 py-1.5 rounded-full border border-accent/20">
+                  <span className="text-xs font-medium text-foreground-muted">
                     Track 1
                   </span>
                 </div>
-                <h3 className="text-2xl font-semibold mb-3">
-                  Global <span className="font-serif italic text-foreground-muted">Payroll</span>
+                <h3 className="text-xl font-medium mb-3">
+                  Global <span className="font-serif italic">Payroll</span>
                 </h3>
                 <p className="text-foreground-muted leading-relaxed mb-6">
                   Upload CSV, pay your team worldwide. On-chain receipts, zero bank delays.
                 </p>
-                <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-4 transition-all">
+                <div className="flex items-center gap-2 text-foreground-muted font-medium group-hover:text-foreground group-hover:gap-3 transition-all">
                   Open app
                   <ArrowRight className="w-4 h-4" />
                 </div>
@@ -269,18 +269,18 @@ export default function Home() {
             </Link>
 
             {/* Trade Finance */}
-            <div className="group opacity-60 cursor-not-allowed">
-              <div className="h-full bg-card border border-border rounded-3xl p-8">
+            <div className="group opacity-50 cursor-not-allowed">
+              <div className="h-full bg-card border border-border rounded-2xl p-8">
                 <div className="flex items-start justify-between mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-foreground-subtle/10 flex items-center justify-center">
-                    <Shield className="w-7 h-7 text-foreground-subtle" />
+                  <div className="w-12 h-12 rounded-xl bg-foreground/5 flex items-center justify-center">
+                    <Shield className="w-6 h-6 text-foreground-subtle" />
                   </div>
-                  <span className="text-xs font-medium text-foreground-muted bg-card-hover px-3 py-1.5 rounded-full border border-border">
+                  <span className="text-xs font-medium text-foreground-subtle">
                     Coming Soon
                   </span>
                 </div>
-                <h3 className="text-2xl font-semibold mb-3">
-                  Trade Finance <span className="font-serif italic text-foreground-muted">Escrow</span>
+                <h3 className="text-xl font-medium mb-3">
+                  Trade Finance <span className="font-serif italic">Escrow</span>
                 </h3>
                 <p className="text-foreground-muted leading-relaxed mb-6">
                   Lock {CURRENCY_SYMBOLS.USD} USDC in smart escrow. Release on milestone completion.
@@ -290,18 +290,18 @@ export default function Home() {
             </div>
 
             {/* AI Agent */}
-            <div className="group opacity-60 cursor-not-allowed">
-              <div className="h-full bg-card border border-border rounded-3xl p-8">
+            <div className="group opacity-50 cursor-not-allowed">
+              <div className="h-full bg-card border border-border rounded-2xl p-8">
                 <div className="flex items-start justify-between mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-foreground-subtle/10 flex items-center justify-center">
-                    <Zap className="w-7 h-7 text-foreground-subtle" />
+                  <div className="w-12 h-12 rounded-xl bg-foreground/5 flex items-center justify-center">
+                    <Zap className="w-6 h-6 text-foreground-subtle" />
                   </div>
-                  <span className="text-xs font-medium text-foreground-muted bg-card-hover px-3 py-1.5 rounded-full border border-border">
+                  <span className="text-xs font-medium text-foreground-subtle">
                     Coming Soon
                   </span>
                 </div>
-                <h3 className="text-2xl font-semibold mb-3">
-                  AI Payment <span className="font-serif italic text-foreground-muted">Agent</span>
+                <h3 className="text-xl font-medium mb-3">
+                  AI Payment <span className="font-serif italic">Agent</span>
                 </h3>
                 <p className="text-foreground-muted leading-relaxed mb-6">
                   Autonomous agent that orchestrates cross-border payments with nanopayments.
@@ -316,16 +316,16 @@ export default function Home() {
       {/* Live Rates Section */}
       <section id="rates" className="px-6 pb-24">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-card border border-border rounded-3xl p-8 md:p-12">
+          <div className="border border-border rounded-2xl p-8 md:p-10">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
               <div>
-                <p className="text-sm text-primary font-medium uppercase tracking-widest mb-2">Live Rates</p>
-                <h3 className="text-2xl md:text-3xl font-semibold">
-                  Real-time <span className="font-serif italic text-foreground-muted">FX rates</span>
+                <p className="text-xs text-foreground-muted uppercase tracking-[0.2em] mb-2">Live Rates</p>
+                <h3 className="text-2xl font-light">
+                  Real-time <span className="font-serif italic">FX rates</span>
                 </h3>
               </div>
-              <div className="flex items-center gap-2 text-xs bg-success/10 text-success px-3 py-2 rounded-full border border-success/20">
-                <span className="w-2 h-2 bg-success rounded-full animate-pulse" />
+              <div className="flex items-center gap-2 text-xs text-foreground-muted border border-border px-3 py-1.5 rounded-full">
+                <span className="w-1.5 h-1.5 bg-foreground-muted rounded-full animate-pulse" />
                 Auto-updating
               </div>
             </div>
@@ -355,26 +355,26 @@ export default function Home() {
       {/* Tech Stack */}
       <section className="px-6 pb-24">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-br from-card to-background-secondary border border-border rounded-3xl p-8 md:p-12 text-center">
-            <p className="text-sm text-foreground-muted uppercase tracking-widest mb-6">Powered By</p>
+          <div className="border border-border rounded-2xl p-8 md:p-10 text-center">
+            <p className="text-xs text-foreground-muted uppercase tracking-[0.2em] mb-6">Powered By</p>
             <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#3772FF] flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold">C</span>
+                <div className="w-9 h-9 rounded-lg bg-[#3772FF] flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">C</span>
                 </div>
-                <span className="font-semibold">Circle</span>
+                <span className="font-medium">Circle</span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#2775CA] flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold">{CURRENCY_SYMBOLS.USD}</span>
+                <div className="w-9 h-9 rounded-lg bg-[#2775CA] flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">{CURRENCY_SYMBOLS.USD}</span>
                 </div>
-                <span className="font-semibold">USDC</span>
+                <span className="font-medium">USDC</span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
-                  <span className="text-primary-foreground font-bold">A</span>
+                <div className="w-9 h-9 rounded-lg bg-foreground flex items-center justify-center">
+                  <span className="text-background font-bold text-sm">A</span>
                 </div>
-                <span className="font-semibold">Arc L1</span>
+                <span className="font-medium">Arc L1</span>
               </div>
             </div>
           </div>
@@ -386,8 +386,8 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-foreground-muted">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                <span className="text-primary-foreground font-serif font-bold text-sm">R</span>
+              <div className="w-7 h-7 rounded-md bg-foreground flex items-center justify-center">
+                <span className="text-background font-serif font-bold text-sm">R</span>
               </div>
               <span>Built for Circle Arc Hackathon 2025</span>
             </div>

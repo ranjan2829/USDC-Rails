@@ -44,13 +44,13 @@ export default function SignupPage() {
         {/* Logo */}
         <div className="text-center mb-10 animate-slide-up">
           <Link href="/" className="inline-flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-xl glow-primary">
-              <span className="text-primary-foreground font-serif font-bold text-2xl">R</span>
+            <div className="w-10 h-10 rounded-xl bg-foreground flex items-center justify-center">
+              <span className="text-background font-serif font-bold text-xl">R</span>
             </div>
             <span className="font-semibold text-xl tracking-tight">USDC Rails</span>
           </Link>
-          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight mb-3">
-            Create your <span className="font-serif italic text-foreground-muted">account</span>
+          <h1 className="text-2xl md:text-3xl font-light tracking-tight mb-3">
+            Create your <span className="font-serif italic">account</span>
           </h1>
           <p className="text-foreground-muted">Start sending money globally in minutes</p>
         </div>
@@ -152,7 +152,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading || !agreed || !isPasswordValid}
-            className="w-full bg-gradient-to-r from-primary to-primary-hover text-primary-foreground rounded-xl py-4 font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg glow-primary"
+            className="w-full bg-foreground text-background rounded-xl py-3.5 font-medium hover:bg-foreground/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
