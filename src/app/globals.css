@@ -1,32 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  /* Modern fintech color palette - warm neutrals with mint accent */
-  --background: #f5f3f0;
-  --background-secondary: #eae7e2;
-  --foreground: #1a1a1a;
-  --foreground-muted: #6b6b6b;
-  --foreground-subtle: #9a9a9a;
+  /* Modern dark fintech palette */
+  --background: #0a0a0b;
+  --background-secondary: #111113;
+  --background-elevated: #18181b;
+  --foreground: #fafafa;
+  --foreground-muted: #a1a1aa;
+  --foreground-subtle: #71717a;
   
-  /* Primary - sophisticated dark */
-  --primary: #1a1a1a;
-  --primary-foreground: #ffffff;
+  /* Primary - electric cyan */
+  --primary: #06d6a0;
+  --primary-hover: #05c896;
+  --primary-foreground: #0a0a0b;
   
-  /* Accent - subtle teal/mint */
-  --accent: #0d9488;
+  /* Accent - electric blue */
+  --accent: #3b82f6;
   --accent-foreground: #ffffff;
-  --accent-muted: #14b8a6;
+  --accent-muted: #60a5fa;
   
   /* Card & borders */
-  --card: #ffffff;
-  --card-foreground: #1a1a1a;
-  --border: #e5e2dd;
-  --border-subtle: #ebe8e3;
+  --card: #111113;
+  --card-hover: #18181b;
+  --card-foreground: #fafafa;
+  --border: #27272a;
+  --border-subtle: #1f1f23;
   
   /* Status */
-  --success: #10b981;
-  --warning: #f59e0b;
+  --success: #06d6a0;
+  --warning: #fbbf24;
   --destructive: #ef4444;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #06d6a0 0%, #3b82f6 100%);
+  --gradient-glow: radial-gradient(ellipse at center, rgba(6, 214, 160, 0.15) 0%, transparent 70%);
   
   --radius: 1rem;
 }
@@ -34,15 +41,18 @@
 @theme inline {
   --color-background: var(--background);
   --color-background-secondary: var(--background-secondary);
+  --color-background-elevated: var(--background-elevated);
   --color-foreground: var(--foreground);
   --color-foreground-muted: var(--foreground-muted);
   --color-foreground-subtle: var(--foreground-subtle);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-muted: var(--accent-muted);
   --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
   --color-card-foreground: var(--card-foreground);
   --color-border: var(--border);
   --color-border-subtle: var(--border-subtle);
@@ -51,11 +61,12 @@
   --color-destructive: var(--destructive);
   --font-sans: 'Inter', -apple-system, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
-  --font-mono: 'Geist Mono', monospace;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
 }
 
 html {
   background-color: var(--background);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -65,18 +76,99 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground-subtle);
+}
+
+/* Remove number input spinners */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+/* Selection */
+::selection {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
 }
 
-/* Custom selection */
-::selection {
-  background-color: var(--accent);
-  color: white;
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 0.6s ease-out forwards; }
+.animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
+.animate-gradient { 
+  background-size: 200% 200%;
+  animation: gradient-x 3s ease infinite; 
+}
+
+/* Stagger animations */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* Glass effect */
+.glass {
+  background: rgba(17, 17, 19, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Glow effects */
+.glow-primary {
+  box-shadow: 0 0 40px rgba(6, 214, 160, 0.2);
+}
+.glow-accent {
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
+}
+
+/* Clean text - no gradient slop */
+.text-gradient {
+  color: var(--foreground);
+}
+
+/* Grid background */
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(39, 39, 42, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(39, 39, 42, 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
 }
