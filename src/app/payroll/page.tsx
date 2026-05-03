@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
+import { ArrowLeft, Upload, FileSpreadsheet, Check, X, ExternalLink, Loader2 } from "lucide-react";
 
 interface PayrollRow {
   name: string;
@@ -77,83 +78,103 @@ export default function PayrollPage() {
   const failedCount = rows.filter(r => r.status === "failed").length;
 
   return (
-    <div className="min-h-screen bg-[#080808] text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <div className="border-b border-white/5">
-        <div className="max-w-3xl mx-auto px-5 py-4 flex items-center gap-3">
-          <Link href="/" className="text-gray-600 hover:text-gray-300 transition text-sm">←</Link>
-          <span className="font-semibold">Global Payroll</span>
-          <span className="text-xs text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2 py-0.5 rounded-full ml-auto">
+      <header className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center gap-4">
+          <Link 
+            href="/" 
+            className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-card transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-foreground-muted" />
+          </Link>
+          <div className="flex-1">
+            <h1 className="font-semibold">Global Payroll</h1>
+            <p className="text-xs text-foreground-muted">Batch USDC payments</p>
+          </div>
+          <span className="text-xs font-medium text-accent bg-accent/10 px-3 py-1.5 rounded-full">
             Track 1
           </span>
         </div>
-      </div>
+      </header>
 
-      <div className="max-w-3xl mx-auto px-5 py-8">
+      <main className="max-w-3xl mx-auto px-6 py-8">
         {rows.length === 0 && (
           <>
-            {/* Upload area */}
-            <div className="text-center mb-8">
-              <h1 className="text-2xl font-semibold mb-2">Pay your team globally</h1>
-              <p className="text-gray-500 text-sm">Upload a CSV with recipients. We handle the rest.</p>
+            {/* Upload Header */}
+            <div className="text-center mb-10">
+              <h2 className="text-3xl font-semibold tracking-tight mb-3">
+                Pay your team <span className="font-serif italic text-foreground-muted">globally</span>
+              </h2>
+              <p className="text-foreground-muted">Upload a CSV with recipients. We handle the rest.</p>
             </div>
 
+            {/* Upload Area */}
             <div
               onClick={() => fileRef.current?.click()}
-              className="border-2 border-dashed border-white/8 hover:border-violet-500/40 rounded-2xl p-12 text-center cursor-pointer transition-all group mb-4"
+              className="border-2 border-dashed border-border hover:border-accent rounded-3xl p-16 text-center cursor-pointer transition-all group mb-5"
             >
               <input ref={fileRef} type="file" accept=".csv" onChange={handleFile} className="hidden" />
-              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-2xl mx-auto mb-4 group-hover:bg-violet-500/10 transition">
-                📄
+              <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-5 group-hover:scale-105 transition-transform">
+                <Upload className="w-8 h-8 text-accent" />
               </div>
-              <p className="text-white font-medium mb-1">Drop CSV file here</p>
-              <p className="text-gray-600 text-sm mb-4">or click to browse</p>
-              <div className="inline-flex items-center gap-2 bg-white/5 rounded-lg px-3 py-1.5 text-xs font-mono text-gray-500">
+              <p className="text-foreground font-semibold text-lg mb-2">Drop CSV file here</p>
+              <p className="text-foreground-muted text-sm mb-5">or click to browse</p>
+              <div className="inline-flex items-center gap-2 bg-background-secondary rounded-lg px-4 py-2 text-xs font-mono text-foreground-muted">
+                <FileSpreadsheet className="w-4 h-4" />
                 name, wallet_address, amount_usdc
               </div>
             </div>
 
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex-1 h-px bg-white/5"></div>
-              <span className="text-xs text-gray-600">or</span>
-              <div className="flex-1 h-px bg-white/5"></div>
+            <div className="flex items-center gap-4 mb-5">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-sm text-foreground-muted">or</span>
+              <div className="flex-1 h-px bg-border" />
             </div>
 
             <button
               onClick={() => { setRows(parseCSV(DEMO_CSV)); setDone(false); }}
-              className="w-full bg-white/[0.04] hover:bg-white/[0.07] border border-white/8 rounded-2xl py-3.5 text-sm font-medium text-gray-400 hover:text-white transition"
+              className="w-full bg-card hover:bg-background-secondary border border-border rounded-2xl py-4 text-sm font-medium text-foreground-muted hover:text-foreground transition"
             >
               Load demo data (3 recipients)
             </button>
 
-            {/* CSV preview */}
-            <div className="mt-8 bg-white/[0.03] border border-white/5 rounded-2xl overflow-hidden">
-              <div className="px-4 py-3 border-b border-white/5">
-                <p className="text-xs text-gray-600 font-mono uppercase tracking-wide">Expected format</p>
+            {/* CSV Preview */}
+            <div className="mt-10 bg-card border border-border rounded-2xl overflow-hidden">
+              <div className="px-5 py-4 border-b border-border">
+                <p className="text-xs text-foreground-muted font-medium uppercase tracking-wide">Expected Format</p>
               </div>
-              <pre className="p-4 text-xs font-mono text-gray-500 leading-6 overflow-x-auto">{DEMO_CSV}</pre>
+              <pre className="p-5 text-xs font-mono text-foreground-muted leading-6 overflow-x-auto">{DEMO_CSV}</pre>
             </div>
           </>
         )}
 
         {rows.length > 0 && (
           <>
-            {/* Summary bar */}
-            <div className="flex items-center justify-between mb-5">
+            {/* Summary Bar */}
+            <div className="flex items-center justify-between mb-6">
               <div>
-                <p className="font-semibold">{rows.length} recipients</p>
-                <p className="text-gray-500 text-sm">{total.toFixed(2)} USDC total</p>
+                <p className="text-xl font-semibold">{rows.length} recipients</p>
+                <p className="text-foreground-muted">{total.toFixed(2)} USDC total</p>
               </div>
               {done && (
-                <div className="flex gap-3 text-sm">
-                  <span className="text-emerald-400 font-medium">{sentCount} sent</span>
-                  {failedCount > 0 && <span className="text-red-400">{failedCount} failed</span>}
+                <div className="flex gap-4 text-sm">
+                  <span className="text-success font-semibold flex items-center gap-1.5">
+                    <Check className="w-4 h-4" />
+                    {sentCount} sent
+                  </span>
+                  {failedCount > 0 && (
+                    <span className="text-destructive font-semibold flex items-center gap-1.5">
+                      <X className="w-4 h-4" />
+                      {failedCount} failed
+                    </span>
+                  )}
                 </div>
               )}
               {!sending && !done && (
                 <button
                   onClick={() => setRows([])}
-                  className="text-xs text-gray-600 hover:text-gray-400 transition"
+                  className="text-sm text-foreground-muted hover:text-foreground transition"
                 >
                   Clear
                 </button>
@@ -161,68 +182,78 @@ export default function PayrollPage() {
             </div>
 
             {/* Table */}
-            <div className="bg-white/[0.03] border border-white/5 rounded-2xl overflow-hidden mb-5">
-              <div className="grid grid-cols-[auto_1fr_auto_auto] gap-0">
-                {/* Header */}
-                <div className="contents">
-                  {["#", "Recipient", "Amount", "Status"].map((h, i) => (
-                    <div key={h} className={`px-5 py-3 text-xs font-medium text-gray-600 uppercase tracking-wide border-b border-white/5 ${i === 2 || i === 3 ? "text-right" : ""}`}>
-                      {h}
-                    </div>
+            <div className="bg-card border border-border rounded-2xl overflow-hidden mb-6">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="px-5 py-4 text-left text-xs font-medium text-foreground-muted uppercase tracking-wide w-12">#</th>
+                    <th className="px-5 py-4 text-left text-xs font-medium text-foreground-muted uppercase tracking-wide">Recipient</th>
+                    <th className="px-5 py-4 text-right text-xs font-medium text-foreground-muted uppercase tracking-wide">Amount</th>
+                    <th className="px-5 py-4 text-right text-xs font-medium text-foreground-muted uppercase tracking-wide w-28">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, i) => (
+                    <tr key={i} className="border-b border-border last:border-b-0">
+                      <td className="px-5 py-4 text-sm text-foreground-muted">{i + 1}</td>
+                      <td className="px-5 py-4">
+                        <p className="text-sm font-medium text-foreground">{row.name}</p>
+                        <p className="text-xs font-mono text-foreground-muted mt-0.5">
+                          {row.address.slice(0, 8)}...{row.address.slice(-6)}
+                        </p>
+                      </td>
+                      <td className="px-5 py-4 text-right text-sm font-medium text-foreground">
+                        {row.amount} USDC
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        {row.status === "pending" && (
+                          <span className="text-xs text-foreground-muted">Queued</span>
+                        )}
+                        {row.status === "sending" && (
+                          <span className="text-xs text-warning flex items-center gap-1.5 justify-end">
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            Sending
+                          </span>
+                        )}
+                        {row.status === "done" && (
+                          <span className="text-xs text-success flex items-center gap-1 justify-end">
+                            <Check className="w-3.5 h-3.5" />
+                            Sent
+                            {row.txId && (
+                              <a
+                                href={`https://testnet.arcscan.app/tx/${row.txId}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-accent hover:underline ml-1"
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            )}
+                          </span>
+                        )}
+                        {row.status === "failed" && (
+                          <span className="text-xs text-destructive flex items-center gap-1 justify-end" title={row.error}>
+                            <X className="w-3.5 h-3.5" />
+                            Failed
+                          </span>
+                        )}
+                      </td>
+                    </tr>
                   ))}
-                </div>
-                {/* Rows */}
-                {rows.map((row, i) => (
-                  <div key={i} className="contents">
-                    <div className="px-5 py-3.5 text-xs text-gray-700 border-b border-white/[0.03]">{i + 1}</div>
-                    <div className="px-5 py-3.5 border-b border-white/[0.03]">
-                      <p className="text-sm font-medium text-white">{row.name}</p>
-                      <p className="text-xs font-mono text-gray-600 mt-0.5">
-                        {row.address.slice(0, 8)}…{row.address.slice(-6)}
-                      </p>
-                    </div>
-                    <div className="px-5 py-3.5 text-right text-sm font-medium border-b border-white/[0.03]">
-                      {row.amount} USDC
-                    </div>
-                    <div className="px-5 py-3.5 text-right border-b border-white/[0.03]">
-                      {row.status === "pending" && <span className="text-xs text-gray-600">Queued</span>}
-                      {row.status === "sending" && (
-                        <span className="text-xs text-yellow-400 animate-pulse">Sending…</span>
-                      )}
-                      {row.status === "done" && (
-                        <span className="text-xs text-emerald-400 flex items-center gap-1 justify-end">
-                          ✓ Sent
-                          {row.txId && (
-                            <a
-                              href={`https://testnet.arcscan.app/tx/${row.txId}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-blue-500 hover:text-blue-400"
-                            >
-                              ↗
-                            </a>
-                          )}
-                        </span>
-                      )}
-                      {row.status === "failed" && (
-                        <span className="text-xs text-red-400" title={row.error}>✗ Failed</span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                </tbody>
+              </table>
             </div>
 
-            {/* Progress bar while sending */}
+            {/* Progress Bar */}
             {sending && (
-              <div className="mb-5">
-                <div className="flex justify-between text-xs text-gray-500 mb-2">
+              <div className="mb-6">
+                <div className="flex justify-between text-sm text-foreground-muted mb-2">
                   <span>Processing</span>
                   <span>{sentCount + failedCount} / {rows.length}</span>
                 </div>
-                <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                <div className="h-2 bg-background-secondary rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                    className="h-full bg-accent rounded-full transition-all duration-500"
                     style={{ width: `${((sentCount + failedCount) / rows.length) * 100}%` }}
                   />
                 </div>
@@ -233,25 +264,32 @@ export default function PayrollPage() {
               <button
                 onClick={sendAll}
                 disabled={sending}
-                className="w-full bg-violet-600 hover:bg-violet-500 disabled:bg-white/5 disabled:text-gray-600 disabled:cursor-not-allowed rounded-2xl py-4 font-semibold transition-all"
+                className="w-full bg-primary text-primary-foreground disabled:bg-foreground-subtle/20 disabled:text-foreground-subtle disabled:cursor-not-allowed rounded-2xl py-4 font-semibold transition-all flex items-center justify-center gap-2"
               >
-                {sending
-                  ? `Sending… ${sentCount + failedCount} of ${rows.length}`
-                  : `Pay ${rows.length} recipients · ${total.toFixed(2)} USDC ⚡`}
+                {sending ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Sending {sentCount + failedCount} of {rows.length}
+                  </>
+                ) : (
+                  <>
+                    Pay {rows.length} recipients - {total.toFixed(2)} USDC
+                  </>
+                )}
               </button>
             )}
 
             {done && (
               <button
                 onClick={() => { setRows([]); setDone(false); }}
-                className="w-full bg-white/5 hover:bg-white/8 border border-white/5 rounded-2xl py-4 font-medium text-gray-400 hover:text-white transition"
+                className="w-full bg-card hover:bg-background-secondary border border-border rounded-2xl py-4 font-medium text-foreground-muted hover:text-foreground transition"
               >
                 New payroll run
               </button>
             )}
           </>
         )}
-      </div>
+      </main>
     </div>
   );
 }
