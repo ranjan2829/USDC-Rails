@@ -11,10 +11,13 @@
   "dependencies": {
     "@circle-fin/developer-controlled-wallets": "^10.3.1",
     "@circle-fin/user-controlled-wallets": "^10.3.1",
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/playfair-display": "^5.2.8",
     "@types/uuid": "^10.0.0",
     "axios": "^1.15.2",
     "dotenv": "^17.4.2",
     "ethers": "^6.16.0",
+    "lucide-react": "^1.14.0",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
