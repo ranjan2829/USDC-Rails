@@ -1,43 +1,68 @@
 @import "tailwindcss";
 
+/* ── Dark mode (default) ──────────────────────────────────── */
 :root {
-  /* Modern dark fintech palette */
   --background: #0a0a0b;
   --background-secondary: #111113;
   --background-elevated: #18181b;
   --foreground: #fafafa;
   --foreground-muted: #a1a1aa;
   --foreground-subtle: #71717a;
-  
-  /* Primary - electric cyan */
+
   --primary: #06d6a0;
   --primary-hover: #05c896;
   --primary-foreground: #0a0a0b;
-  
-  /* Accent - electric blue */
+
   --accent: #3b82f6;
   --accent-foreground: #ffffff;
   --accent-muted: #60a5fa;
-  
-  /* Card & borders */
+
   --card: #111113;
   --card-hover: #18181b;
   --card-foreground: #fafafa;
   --border: #27272a;
   --border-subtle: #1f1f23;
-  
-  /* Status */
+
   --success: #06d6a0;
   --warning: #fbbf24;
   --destructive: #ef4444;
-  
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #06d6a0 0%, #3b82f6 100%);
-  --gradient-glow: radial-gradient(ellipse at center, rgba(6, 214, 160, 0.15) 0%, transparent 70%);
-  
-  --radius: 1rem;
+
+  color-scheme: dark;
 }
 
+/* ── Light mode ───────────────────────────────────────────── */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #f8f8f8;
+    --background-secondary: #efefef;
+    --background-elevated: #ffffff;
+    --foreground: #0a0a0b;
+    --foreground-muted: #52525b;
+    --foreground-subtle: #71717a;
+
+    --primary: #059669;
+    --primary-hover: #047857;
+    --primary-foreground: #ffffff;
+
+    --accent: #2563eb;
+    --accent-foreground: #ffffff;
+    --accent-muted: #3b82f6;
+
+    --card: #ffffff;
+    --card-hover: #f4f4f5;
+    --card-foreground: #0a0a0b;
+    --border: #e4e4e7;
+    --border-subtle: #f0f0f0;
+
+    --success: #059669;
+    --warning: #d97706;
+    --destructive: #dc2626;
+
+    color-scheme: light;
+  }
+}
+
+/* ── Theme tokens ─────────────────────────────────────────── */
 @theme inline {
   --color-background: var(--background);
   --color-background-secondary: var(--background-secondary);
@@ -59,11 +84,14 @@
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-destructive: var(--destructive);
-  --font-sans: 'Inter', -apple-system, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* Use the Next.js font variables */
+  --font-sans: var(--font-inter), -apple-system, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-mono: ui-monospace, 'Geist Mono', monospace;
 }
 
+/* ── Base ─────────────────────────────────────────────────── */
 html {
   background-color: var(--background);
   scroll-behavior: smooth;
@@ -72,103 +100,54 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--foreground-subtle);
-}
-
-/* Remove number input spinners */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
 
-/* Selection */
 ::selection {
   background-color: var(--primary);
   color: var(--primary-foreground);
 }
 
-/* Animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes gradient-x {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.animate-float { animation: float 6s ease-in-out infinite; }
-.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-.animate-slide-up { animation: slide-up 0.6s ease-out forwards; }
-.animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
-.animate-gradient { 
-  background-size: 200% 200%;
-  animation: gradient-x 3s ease infinite; 
-}
-
-/* Stagger animations */
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-.stagger-5 { animation-delay: 0.5s; }
-
-/* Glass effect */
+/* ── Utilities ────────────────────────────────────────────── */
 .glass {
-  background: rgba(17, 17, 19, 0.8);
+  background: color-mix(in srgb, var(--background) 80%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* Glow effects */
-.glow-primary {
-  box-shadow: 0 0 40px rgba(6, 214, 160, 0.2);
-}
-.glow-accent {
-  box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
-}
-
-/* Clean text - no gradient slop */
-.text-gradient {
-  color: var(--foreground);
-}
-
-/* Grid background */
 .grid-bg {
-  background-image: 
-    linear-gradient(rgba(39, 39, 42, 0.3) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(39, 39, 42, 0.3) 1px, transparent 1px);
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
   background-size: 60px 60px;
 }
+
+.glow-primary { box-shadow: 0 0 40px color-mix(in srgb, var(--primary) 25%, transparent); }
+
+/* ── Animations ───────────────────────────────────────────── */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-slide-up { animation: slide-up 0.5s ease-out forwards; }
+.animate-fade-in  { animation: fade-in 0.4s ease-out forwards; }
+
+.stagger-1 { animation-delay: 0.1s; opacity: 0; }
+.stagger-2 { animation-delay: 0.2s; opacity: 0; }
+.stagger-3 { animation-delay: 0.3s; opacity: 0; }
+.stagger-4 { animation-delay: 0.4s; opacity: 0; }
