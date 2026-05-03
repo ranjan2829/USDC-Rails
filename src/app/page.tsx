@@ -20,11 +20,16 @@ const CORRIDORS = [
 export default function Home() {
   const [fxRates, setFxRates] = useState<Record<string, number>>({});
   const [activeRate, setActiveRate] = useState(0);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     fetch("https://open.er-api.com/v6/latest/USD")
       .then(r => r.json())
       .then(d => { if (d.rates) setFxRates(d.rates); })
+      .catch(() => {});
+    fetch("/api/me")
+      .then(r => r.json())
+      .then(d => { if (!d.error) setLoggedIn(true); })
       .catch(() => {});
   }, []);
 
@@ -69,18 +74,29 @@ export default function Home() {
               <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
               Arc Testnet
             </div>
-            <Link
-              href="/login"
-              className="text-sm text-foreground-muted hover:text-foreground px-4 py-2 transition-colors"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/signup"
-              className="bg-foreground text-background px-4 py-2 rounded-full text-sm font-medium hover:opacity-85 transition-opacity flex items-center gap-1.5"
-            >
-              Get started <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            {loggedIn ? (
+              <Link
+                href="/dashboard"
+                className="bg-foreground text-background px-4 py-2 rounded-full text-sm font-medium hover:opacity-85 transition-opacity flex items-center gap-1.5"
+              >
+                Dashboard <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm text-foreground-muted hover:text-foreground px-4 py-2 transition-colors"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/signup"
+                  className="bg-foreground text-background px-4 py-2 rounded-full text-sm font-medium hover:opacity-85 transition-opacity flex items-center gap-1.5"
+                >
+                  Get started <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -129,10 +145,10 @@ export default function Home() {
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-slide-up stagger-4">
             <Link
-              href="/signup"
+              href={loggedIn ? "/dashboard" : "/signup"}
               className="w-full sm:w-auto bg-foreground text-background px-8 py-3.5 rounded-full font-semibold hover:opacity-85 transition-opacity flex items-center justify-center gap-2 shadow-lg"
             >
-              Create free account <ArrowRight className="w-4 h-4" />
+              {loggedIn ? "Go to Dashboard" : "Create free account"} <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/login"
