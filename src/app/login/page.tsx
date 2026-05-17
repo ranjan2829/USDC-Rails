@@ -18,6 +18,7 @@ export default function LoginPage() {
     setGoogleLoading(true);
     setError("");
     try {
+      if (!auth) throw new Error("Firebase not initialized");
       const result = await signInWithPopup(auth, googleProvider);
       const idToken = await result.user.getIdToken();
 
