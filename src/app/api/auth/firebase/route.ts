@@ -1,41 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
+import jwt from "jsonwebtoken";
 import { createAdminClient } from "@/lib/supabase/server";
 import { circleClient } from "@/lib/circle.server";
 import { generateCiphertext } from "@/lib/cipher";
 import { signToken, COOKIE } from "@/lib/auth";
 
+const FIREBASE_PROJECT_ID =
+  process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? "usdc-fb7fe";
+
 async function verifyFirebaseToken(idToken: string) {
-  // Decode JWT header to get kid
   const [headerB64] = idToken.split(".");
   const header = JSON.parse(Buffer.from(headerB64, "base64url").toString());
 
-  // Fetch Firebase public keys
+  // Plain fetch — no Next.js-specific options that changed in v16
   const keysRes = await fetch(
-    "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com",
-    { next: { revalidate: 3600 } }
+    "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
   );
+  if (!keysRes.ok) throw new Error("Failed to fetch Firebase public keys");
   const keys = await keysRes.json();
+
   const publicKey = keys[header.kid];
-  if (!publicKey) throw new Error("Unknown key");
+  if (!publicKey) throw new Error("Unknown signing key");
 
-  // Decode payload (trust Google's signing — in prod use firebase-admin for full verify)
-  const [, payloadB64] = idToken.split(".");
-  const payload = JSON.parse(Buffer.from(payloadB64, "base64url").toString());
+  // Full RS256 signature verification with jsonwebtoken
+  const verified = jwt.verify(idToken, publicKey, {
+    algorithms: ["RS256"],
+    audience: FIREBASE_PROJECT_ID,
+    issuer: `https://securetoken.google.com/${FIREBASE_PROJECT_ID}`,
+  }) as Record<string, unknown>;
 
-  const now = Math.floor(Date.now() / 1000);
-  if (payload.exp < now) throw new Error("Token expired");
-  if (payload.aud !== process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    // Also accept app ID format
-    if (!payload.aud?.includes("usdc-fb7fe")) throw new Error("Invalid audience");
-  }
-
-  return payload as {
-    sub: string;
-    email: string;
-    name?: string;
-    picture?: string;
-    firebase: { sign_in_provider: string };
+  return {
+    sub: verified.sub as string,
+    email: verified.email as string,
+    name: verified.name as string | undefined,
+    picture: verified.picture as string | undefined,
+    firebase: verified.firebase as { sign_in_provider: string },
   };
 }
 

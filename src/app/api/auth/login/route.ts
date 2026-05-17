@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { signToken, COOKIE } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,21 +16,33 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    // Fetch profile
-    const { data: profile } = await supabase
+    const admin = createAdminClient();
+    const { data: profile } = await admin
       .from("profiles")
-      .select("name, wallet_address")
+      .select("id, name, wallet_address")
       .eq("id", data.user.id)
       .single();
 
-    return NextResponse.json({
+    const profileId = profile?.id ?? data.user.id;
+    const token = signToken({ userId: profileId, email: data.user.email! });
+
+    const res = NextResponse.json({
       user: {
-        id: data.user.id,
+        id: profileId,
         email: data.user.email,
         name: profile?.name ?? "",
         walletAddress: profile?.wallet_address ?? "",
       },
     });
+
+    res.cookies.set(COOKIE, token, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    });
+
+    return res;
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Login failed";
     return NextResponse.json({ error: message }, { status: 500 });

@@ -79,10 +79,11 @@ export default function SendPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          walletId: process.env.NEXT_PUBLIC_DEMO_WALLET_ID || "b5d911fd-8d0b-5ed1-88b1-2d244bff80fe",
           recipientAddress: form.recipientAddress,
           amount: usdcAmount.toFixed(6),
           destinationCountry: form.destinationCountry,
+          inputCurrency,
+          inputAmount: rawAmount,
         }),
       });
       const data = await res.json();
@@ -187,7 +188,7 @@ export default function SendPage() {
                     {CURRENCY_SYMBOLS.USD}
                     {usdcAmount.toFixed(2)} USDC
                   </span>
-                  <span className="ml-2 text-foreground-subtle">@ 1 {CURRENCY_SYMBOLS.AED} = $0.2723</span>
+                  <span className="ml-2 text-foreground-subtle">@ 1 {CURRENCY_SYMBOLS.AED} = ${AED_TO_USD.toFixed(4)}</span>
                 </p>
               )}
             </div>

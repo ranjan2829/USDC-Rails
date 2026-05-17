@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import {
   Globe, LogOut, Send, Users, Copy, CheckCheck,
-  ExternalLink, ArrowUpRight, Wallet, Clock, Lock, FileText, Bot, Home,
+  ExternalLink, ArrowUpRight, Wallet, Clock, Lock, FileText, Bot, Home, Banknote,
 } from "lucide-react";
 
 interface UserProfile {
@@ -179,11 +179,12 @@ export default function DashboardPage() {
           <p className="text-xs text-foreground-muted uppercase tracking-wider mb-3">Products</p>
           <div className="grid grid-cols-2 gap-4">
             {([
-              { href: "/send",    icon: <Send className="w-5 h-5" />,     label: "Send USDC",  sub: "Cross-border payments", track: "Track 1" },
-              { href: "/payroll", icon: <Users className="w-5 h-5" />,    label: "Payroll",    sub: "Batch CSV payments",    track: "Track 1" },
-              { href: "/escrow",  icon: <Lock className="w-5 h-5" />,     label: "Escrow",     sub: "Trade finance lock",    track: "Track 2" },
-              { href: "/invoice", icon: <FileText className="w-5 h-5" />, label: "Invoices",   sub: "Get paid in USDC",      track: "Track 3" },
-              { href: "/agent",   icon: <Bot className="w-5 h-5" />,      label: "AI Agent",   sub: "Natural language pay",  track: "Track 4" },
+              { href: "/send",        icon: <Send className="w-5 h-5" />,     label: "Send USDC",   sub: "Cross-border payments", track: "Track 1" },
+              { href: "/remittance", icon: <Banknote className="w-5 h-5" />, label: "Remittance",  sub: "Send money home",       track: "Track 1" },
+              { href: "/payroll",    icon: <Users className="w-5 h-5" />,    label: "Payroll",     sub: "Batch CSV payments",    track: "Track 1" },
+              { href: "/escrow",     icon: <Lock className="w-5 h-5" />,     label: "Escrow",      sub: "Trade finance lock",    track: "Track 2" },
+              { href: "/invoice",    icon: <FileText className="w-5 h-5" />, label: "Invoices",    sub: "Get paid in USDC",      track: "Track 3" },
+              { href: "/agent",      icon: <Bot className="w-5 h-5" />,      label: "AI Agent",    sub: "Natural language pay",  track: "Track 4" },
             ] as { href: string; icon: React.ReactNode; label: string; sub: string; track: string }[]).map(({ href, icon, label, sub, track }) => (
               <Link key={href} href={href}>
                 <div className="group bg-card border border-border hover:border-foreground/20 rounded-2xl p-6 cursor-pointer transition-all">

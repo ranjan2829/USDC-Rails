@@ -17,9 +17,9 @@ interface Intent {
 }
 
 const EXAMPLES = [
-  "Pay 5 USDC to 0x154212C94280f8277607c6f8052365c3F44782BC for logo design",
-  "Send 10 USDC to 0x154212C94280f8277607c6f8052365c3F44782BC for consulting",
-  "Transfer 2.5 USDC to 0x154212C94280f8277607c6f8052365c3F44782BC",
+  "Pay 5 USDC to 0x... for logo design",
+  "Send 10 USDC to 0x... for consulting",
+  "Transfer 2.5 USDC to 0x...",
 ];
 
 export default function AgentPage() {

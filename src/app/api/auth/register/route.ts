@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { circleClient } from "@/lib/circle.server";
 import { generateCiphertext } from "@/lib/cipher";
+import { signToken, COOKIE } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
@@ -52,15 +53,26 @@ export async function POST(req: NextRequest) {
     const wallet = walletRes.data?.wallets?.[0];
     if (!wallet) throw new Error("Failed to create wallet");
 
-    // Save wallet info to profile (use admin to bypass RLS during setup)
+    // Upsert profile (Supabase may or may not have a trigger to create it)
     await admin
       .from("profiles")
-      .update({ wallet_id: wallet.id, wallet_address: wallet.address, name })
+      .upsert({ id: userId, email, name, wallet_id: wallet.id, wallet_address: wallet.address })
       .eq("id", userId);
 
-    return NextResponse.json({
+    const token = signToken({ userId, email });
+
+    const res = NextResponse.json({
       user: { id: userId, name, email, walletAddress: wallet.address },
     });
+
+    res.cookies.set(COOKIE, token, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 7,
+      path: "/",
+    });
+
+    return res;
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Registration failed";
     console.error("Register error:", message);

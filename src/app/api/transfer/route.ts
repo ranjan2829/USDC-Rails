@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { circleClient } from "@/lib/circle.server";
 import { generateCiphertext } from "@/lib/cipher";
+import { getChainConfig } from "@/lib/chain-config";
 import { createAdminClient } from "@/lib/supabase/server";
 import { getSession } from "@/lib/auth";
-
-const ARC_USDC_ADDRESS = "0x3600000000000000000000000000000000000000";
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,25 +19,30 @@ export async function POST(req: NextRequest) {
     }
 
     const session = await getSession();
-    let walletId = process.env.NEXT_PUBLIC_DEMO_WALLET_ID ?? "b5d911fd-8d0b-5ed1-88b1-2d244bff80fe";
-
-    if (session) {
-      const admin = createAdminClient();
-      const { data: profile } = await admin
-        .from("profiles")
-        .select("wallet_id")
-        .eq("id", session.userId)
-        .single();
-      if (profile?.wallet_id) walletId = profile.wallet_id;
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const admin = createAdminClient();
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("wallet_id")
+      .eq("id", session.userId)
+      .single();
+
+    const walletId = profile?.wallet_id;
+    if (!walletId) {
+      return NextResponse.json({ error: "No wallet found. Please complete account setup." }, { status: 400 });
+    }
+
+    const { chain, usdcAddress } = getChainConfig();
     const ciphertext = await generateCiphertext();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transfer = await circleClient.createTransaction({
       walletId,
-      blockchain: "ARC-TESTNET",
-      tokenAddress: ARC_USDC_ADDRESS,
+      blockchain: chain,
+      tokenAddress: usdcAddress,
       destinationAddress: recipientAddress,
       amount: [amount.toString()],
       fee: { type: "level", config: { feeLevel: "MEDIUM" } },
